@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meditation Mentor</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; line-height: 1.6; }
+    h1 { font-size: 1.8em; }
+    .question { margin-bottom: 1.2em; }
+    .result { margin-top: 2em; font-weight: bold; font-size: 1.2em; }
+    button { padding: 0.6em 1.2em; font-size: 1em; }
+    .footer { margin-top: 3em; font-size: 0.9em; color: #666; border-top: 1px solid #ccc; padding-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Meditation Mentor Questionnaire</h1>
+  <p> by Raymond Reed Hardy 
+      (c) 1994--2025
+  </p>
+  <p>
+    Meditation Mentor is a diagnostic questionnaire designed to help the readers of my book, Zen Master: Practical Zen by an American for Americans, determine which of several meditation approaches might work best for them. Such questionnaires are imprecise tools. The results may not be accurate. Further reading will be needed unless the person taking the test is already quite familiar with the recommended techniques.
+  </p>
+  <p>
+    This program is provided under the condition that the user recognizes that the author can, in no way, be held responsible for the accuracy of the program's suggestions, nor the consequences of following the recommendations given. In some states a general disclaimer of this nature is not valid. The use of this app in such states is hereby prohibited.
+  </p>
+  <p>
+    Meditation Mentor is provided free of charge and may not be sold or modified without >he author’s express written permission. While it may be shared under the terms of the Creative Commons Attribution-NonCommercial-NoDerivatives license, the author retains all copyright and moral rights to the original work.
+  </p>
+  <p>
+    For the items below select the number that best reflects these values:
+  </p>
+  <p>
+    0-No Answer, 1=Strongly Agree, 2=Agree, 3=Disagree, 4=Strongly Disagree
+  </p>
+
+  <form id="quizForm">
+    <div id="questions"></div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <div class="footer">
+    <p>© 1991–2025 Reed Hardy. All rights reserved.</p>
+    <p>This work is licensed under a <strong>Creative Commons Attribution-NonCommercial-NoDerivatives (CC BY-NC-ND)</strong> license.</p>
+    <p>Generated with assistance from ChatGPT-4.0.</p>
+  </div>
+
+  <script>
+    const categories = {
+      Vipassana: 0,
+      Zen: 0,
+      Concentration: 0,
+      LovingKindness: 0,
+      Mantra: 0,
+      Visualization: 0,
+      Breath: 0,
+      BodyMindfulness: 0,
+    };
+
+    const questionToCategory = [
+      "BodyMindfulness", "Zen", "Visualization", "Breath", "Mantra",
+      "Vipassana", "Zen", "Concentration", "Visualization", "BodyMindfulness",
+      "Breath", "LovingKindness", "Mantra", "Vipassana", "Zen",
+      "Concentration", "Visualization", "BodyMindfulness", "Breath", "LovingKindness",
+      "Mantra", "Vipassana", "Zen", "Concentration", "Visualization",
+      "BodyMindfulness", "Breath", "LovingKindness", "Mantra", "Vipassana",
+      "Zen", "Concentration", "Visualization", "BodyMindfulness", "Breath",
+      "LovingKindness", "Mantra", "Vipassana", "Zen", "Concentration"
+    ];
+
+    const questions = [
+  "I find it difficult to sit still for long periods.",
+  "I am drawn to meditation practices that emphasize posture and discipline.",
+  "I enjoy using mental imagery or visualization techniques.",
+  "I can easily focus on the sensation of my breath.",
+  "Chanting or repeating phrases appeals to me.",
+  "I’m interested in observing my thoughts and sensations as they arise.",
+  "I value silent sitting and strict Zen form.",
+  "I’m good at concentrating on a single point or idea.",
+  "I enjoy creative or imaginative exercises.",
+  "Walking or body movement feels more natural than sitting still.",
+  "I like to follow the natural rhythm of breathing.",
+  "I feel a strong sense of compassion toward others.",
+  "I enjoy repetitive sounds or words to help me focus.",
+  "I am curious about the impermanence of thoughts and feelings.",
+  "I appreciate minimalistic and traditional environments.",
+  "I find mental clarity in focusing all attention on one thing.",
+  "I prefer guided meditations that lead me step-by-step.",
+  "I’m most comfortable meditating while in motion.",
+  "Breath awareness calms me quickly.",
+  "I often feel a desire to cultivate kindness.",
+  "Sound and vibration help me enter meditative states.",
+  "Noticing changes in sensation interests me.",
+  "I enjoy structured group meditation with ritual.",
+  "I’m good at staying mentally focused.",
+  "I prefer meditations that include creative imagination.",
+  "Scanning the body helps me feel grounded.",
+  "Breath focus works better for me than verbal cues.",
+  "Sending goodwill to others feels meaningful.",
+  "Repetition of a sacred phrase feels powerful.",
+  "I reflect often on cause and effect in life.",
+  "Discipline and form increase my sense of peace.",
+  "Fixating attention helps me quiet the mind.",
+  "Visualization improves my inner awareness.",
+  "Physical awareness is the foundation of my practice.",
+  "Breathing deeply brings me peace.",
+  "I wish to develop lovingkindness more fully.",
+  "Mantra repetition centers me.",
+  "I’m interested in how perception shifts over time.",
+  "I admire the clarity of Zen koans.",
+  "I value precise mental focus above all."
+];
+
+const questionsContainer = document.getElementById("questions");
+questions.forEach((text, i) => {
+  const div = document.createElement("div");
+  div.className = "question";
+  div.innerHTML = `<label><strong>Q${i + 1}:</strong> ${text}</label><br><span style="white-space: nowrap;">
+    <label><input type="radio" name="q${i}" value="0"> 0 (No answer)</label>
+    <label><input type="radio" name="q${i}" value="1"> 1</label>
+    <label><input type="radio" name="q${i}" value="2"> 2</label>
+    <label><input type="radio" name="q${i}" value="3"> 3</label>
+    <label><input type="radio" name="q${i}" value="4"> 4</label></span>`;
+  questionsContainer.appendChild(div);
+});
+
+    document.getElementById("quizForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const form = new FormData(event.target);
+      const responses = Array.from({length: 40}, (_, i) => parseInt(form.get(`q${i}`), 10));
+
+      const scores = { ...categories };
+      responses.forEach((val, idx) => {
+        if (val > 0) {
+          scores[questionToCategory[idx]] += val;
+        }
+      });
+
+      const topCategory = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+
+      let message = "";
+      switch (topCategory) {
+        case "Vipassana": message = "Your survey results suggest you explore <strong>Vipassana or Shikantaza</strong>."; break;
+        case "Zen": message = "Your survey results suggest you explore <strong>Rinzai Zen Meditation</strong>."; break;
+        case "Concentration": message = "Your survey results suggest you explore <strong>Concentration Meditation</strong>."; break;
+        case "LovingKindness": message = "Your survey results suggest you explore <strong>Loving-Kindness Meditation</strong>."; break;
+        case "Mantra": message = "Your survey results suggest you explore <strong>Mantra Meditation</strong>."; break;
+        case "Visualization": message = "Your survey results suggest you explore <strong>Guided Visualization</strong>."; break;
+        case "Breath": message = "Your survey results suggest you explore <strong>Breath Awareness</strong>."; break;
+        case "BodyMindfulness": message = "Your survey results suggest you begin with <strong>Body Scan or Mindful Walking</strong>."; break;
+        default: message = "Unable to determine a recommendation.";
+      }
+
+      document.getElementById("result").innerHTML = `Top category: <strong>${topCategory}</strong><br>${message}`;
+    });
+  </script>
+</body>
+</html>
